@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A beginner-friendly IT help desk ticket management project built with HTML, CSS and vanilla JavaScript.">
+  <title>DeskFlow | IT Help Desk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="DeskFlow home">
+        <span class="brand-mark"><span></span><span></span><span></span></span>
+        <span>desk<span class="brand-light">flow</span><small>IT SERVICE DESK</small></span>
+      </a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="nav-list" aria-label="Main navigation">
+        <button class="nav-item active" data-view="dashboard"><span class="nav-icon">▦</span> Overview</button>
+        <button class="nav-item" data-view="tickets"><span class="nav-icon">▤</span> All tickets <span class="nav-count" id="navTicketCount">0</span></button>
+        <button class="nav-item" data-view="knowledge"><span class="nav-icon">▧</span> Knowledge base</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-tip">
+          <div class="tip-icon">✦</div>
+          <strong>Support tip</strong>
+          <p>Document each troubleshooting step. Clear notes help the next technician resolve issues faster.</p>
+        </div>
+        <div class="profile">
+          <div class="avatar">IT</div>
+          <div class="profile-copy"><strong>IT Support</strong><span>Local demo workspace</span></div>
+          <span class="profile-menu">•••</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Toggle navigation">☰</button>
+        <div class="breadcrumbs"><span>Workspace</span><span class="crumb-slash">/</span><strong id="breadcrumbCurrent">Overview</strong></div>
+        <div class="topbar-actions">
+          <span class="environment-pill"><span></span> Demo environment</span>
+          <button class="icon-button" id="helpButton" title="About this demo" aria-label="About this demo">?</button>
+          <div class="top-avatar">IT</div>
+        </div>
+      </header>
+
+      <section class="page-content">
+        <section class="view active" id="dashboardView">
+          <div class="page-heading">
+            <div><p class="eyebrow" id="currentDate">IT OPERATIONS</p><h1>Good day, Support team <span class="wave">✦</span></h1><p class="subheading">Here’s what’s happening with your service desk today.</p></div>
+            <button class="primary-button" id="newTicketTop"><span>＋</span> Create ticket</button>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card"><div class="stat-top"><span class="stat-label">Total tickets</span><span class="stat-icon blue">▤</span></div><div class="stat-number" id="statTotal">0</div><div class="stat-foot"><span class="stat-dot blue-dot"></span> All reported issues</div></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-label">Open</span><span class="stat-icon amber">◷</span></div><div class="stat-number" id="statOpen">0</div><div class="stat-foot"><span class="stat-dot amber-dot"></span> Awaiting attention</div></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-label">In progress</span><span class="stat-icon violet">↻</span></div><div class="stat-number" id="statProgress">0</div><div class="stat-foot"><span class="stat-dot violet-dot"></span> Currently being worked on</div></article>
+            <article class="stat-card"><div class="stat-top"><span class="stat-label">Resolved</span><span class="stat-icon green">✓</span></div><div class="stat-number" id="statResolved">0</div><div class="stat-foot"><span class="stat-dot green-dot"></span> Successfully closed</div></article>
+          </div>
+
+          <div class="content-grid">
+            <section class="panel ticket-panel">
+              <div class="panel-heading"><div><h2>Recent tickets</h2><p>Your latest support requests</p></div><button class="text-button" id="viewAllTickets">View all <span>→</span></button></div>
+              <div class="table-wrap"><table><thead><tr><th>Ticket</th><th>Requester</th><th>Category</th><th>Priority</th><th>Status</th></tr></thead><tbody id="recentTicketRows"></tbody></table></div>
+              <div class="empty-state hidden" id="recentEmpty"><div class="empty-icon">▤</div><strong>No tickets yet</strong><p>Create your first support ticket to get started.</p></div>
+            </section>
+            <section class="panel priority-panel">
+              <div class="panel-heading"><div><h2>Priority overview</h2><p>Tickets by urgency</p></div><span class="tiny-badge">Live</span></div>
+              <div class="priority-list" id="priorityOverview"></div>
+              <div class="priority-note"><span class="note-check">✓</span><span>Review high-priority tickets first to keep support moving.</span></div>
+            </section>
+          </div>
+          <section class="panel quick-panel">
+            <div class="panel-heading"><div><h2>Quick actions</h2><p>Common service desk tasks</p></div></div>
+            <div class="quick-actions">
+              <button class="quick-action" id="quickCreate"><span class="quick-icon q-blue">＋</span><span><strong>Log a new issue</strong><small>Create a support ticket</small></span><span class="quick-arrow">↗</span></button>
+              <button class="quick-action" id="quickKnowledge"><span class="quick-icon q-purple">▧</span><span><strong>Browse knowledge base</strong><small>Find troubleshooting guides</small></span><span class="quick-arrow">↗</span></button>
+              <button class="quick-action" id="quickOpen"><span class="quick-icon q-orange">◷</span><span><strong>Review open tickets</strong><small>Check unresolved issues</small></span><span class="quick-arrow">↗</span></button>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="ticketsView">
+          <div class="page-heading tickets-heading">
+            <div><p class="eyebrow">SERVICE MANAGEMENT</p><h1>All tickets</h1><p class="subheading">Track, prioritize, and resolve reported IT issues.</p></div>
+            <button class="primary-button" id="newTicketList"><span>＋</span> Create ticket</button>
+          </div>
+          <section class="panel all-tickets-panel">
+            <div class="filters-bar">
+              <label class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Search tickets, ID, requester..." aria-label="Search tickets"></label>
+              <select id="statusFilter" aria-label="Filter by status"><option value="all">All statuses</option><option>Open</option><option>In Progress</option><option>Resolved</option></select>
+              <select id="priorityFilter" aria-label="Filter by priority"><option value="all">All priorities</option><option>High</option><option>Medium</option><option>Low</option></select>
+              <select id="categoryFilter" aria-label="Filter by category"><option value="all">All categories</option><option>Network</option><option>Hardware</option><option>Software</option><option>Access</option><option>Other</option></select>
+              <button class="secondary-button" id="clearFilters">Reset</button>
+            </div>
+            <div class="table-wrap"><table class="wide-table"><thead><tr><th>Ticket details</th><th>Requester</th><th>Category</th><th>Priority</th><th>Status</th><th>Created</th><th>Action</th></tr></thead><tbody id="allTicketRows"></tbody></table></div>
+            <div class="empty-state hidden" id="ticketsEmpty"><div class="empty-icon">⌕</div><strong>No matching tickets</strong><p>Try changing your search or filters.</p><button class="secondary-button" id="emptyReset">Reset filters</button></div>
+            <div class="table-footer"><span id="ticketResultCount">Showing 0 tickets</span><span>Stored in this browser</span></div>
+          </section>
+        </section>
+
+        <section class="view" id="knowledgeView">
+          <div class="page-heading"><div><p class="eyebrow">SELF-SERVICE RESOURCES</p><h1>Knowledge base</h1><p class="subheading">Quick guides for common workplace IT problems.</p></div></div>
+          <div class="knowledge-intro"><div><span class="knowledge-spark">✦</span><h2>Try these first steps</h2><p>Follow safe, basic checks before escalating an issue. If a step requires admin access, contact your IT administrator.</p></div><div class="knowledge-art">⌘</div></div>
+          <div class="knowledge-grid" id="knowledgeGrid"></div>
+          <p class="knowledge-disclaimer">These are general troubleshooting suggestions for a learning demo. Follow your organization's IT policies before changing device or network settings.</p>
+        </section>
+      </section>
+      <footer class="footer"><span>DeskFlow · IT Help Desk Demo</span><span>Built with HTML, CSS & JavaScript</span></footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="ticketModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-heading"><div><p class="eyebrow">SERVICE REQUEST</p><h2 id="modalTitle">Create a ticket</h2><p>Describe the issue so the support team can help.</p></div><button class="close-button" id="closeModal" aria-label="Close dialog">×</button></div>
+      <form id="ticketForm">
+        <div class="form-grid">
+          <label class="form-field full"><span>Issue title <b>*</b></span><input id="ticketTitle" name="title" maxlength="90" required placeholder="e.g. Laptop cannot connect to Wi-Fi"></label>
+          <label class="form-field"><span>Requester name <b>*</b></span><input id="requesterName" name="requester" maxlength="60" required placeholder="e.g. Alex Johnson"></label>
+          <label class="form-field"><span>Category <b>*</b></span><select id="ticketCategory" name="category" required><option value="Network">Network</option><option value="Hardware">Hardware</option><option value="Software">Software</option><option value="Access">Access</option><option value="Other">Other</option></select></label>
+          <label class="form-field"><span>Priority</span><select id="ticketPriority" name="priority"><option>Low</option><option selected>Medium</option><option>High</option></select></label>
+          <label class="form-field"><span>Status</span><select id="ticketStatus" name="status"><option selected>Open</option><option>In Progress</option><option>Resolved</option></select></label>
+          <label class="form-field full"><span>Issue description <b>*</b></span><textarea id="ticketDescription" name="description" maxlength="1000" required rows="4" placeholder="What happened? Include any error message and steps already tried."></textarea><small>Do not include passwords or other sensitive information.</small></label>
+        </div>
+        <div class="form-actions"><button type="button" class="secondary-button" id="cancelModal">Cancel</button><button type="submit" class="primary-button">Create ticket <span>→</span></button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+    <div class="modal detail-modal">
+      <div class="modal-heading"><div><p class="eyebrow" id="detailEyebrow">TICKET DETAILS</p><h2 id="detailTitle">Ticket details</h2><p id="detailSubtitle">Review and update this support request.</p></div><button class="close-button" id="closeDetail" aria-label="Close dialog">×</button></div>
+      <div id="detailBody"></div>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast" role="status" aria-live="polite"><span class="toast-check">✓</span><span id="toastMessage">Saved</span></div>
+  <script src="script.js"></script>
+</body>
+</html>
